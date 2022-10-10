@@ -1,19 +1,23 @@
+import java.util.Enumeration;
+import java.net.NetworkInterface;
 import java.net.InetAddress;
+
 public class os7_2 {
-    public static void main(String[] args){
-        try{
-            InetAddress localHost = InetAddress.getLocalHost();
-            String hostIP = localHost.getHostAddress();
-            System.out.println("local host IP : "+hostIP);
-            String hostName = localHost.getHostName();
-            System.out.println("local host Name : "+hostName);
-            InetAddress[] addresses = InetAddress.getAllByName(hostName);
-            for(int i=0;i<addresses.length;i++){
-                System.out.println("available address : "+addresses[i].getHostAddress());
+    public static void main(String[] args) {
+        try {
+            Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = (NetworkInterface)interfaces.nextElement();
+                System.out.println("network interface"+":"+networkInterface.getName());
+                Enumeration addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = (InetAddress)addresses.nextElement();
+                    System.out.println("        " + "address " + address.getHostAddress());
+                }
             }
         }
-        catch(Exception e){
-            System.out.println("error : "+ e.getMessage());
+        catch (Exception e) {
+            System.err.println(e);
         }
     }
 }
